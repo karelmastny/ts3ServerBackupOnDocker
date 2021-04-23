@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# absolute path to alpine container mount (/mnt)
+alpineDir="/volume1/docker/alpine1"
+
+# TS variables
+
+tsAddress="192.168.11.5"
+serveradminPWD="HNOPB7sZ"
