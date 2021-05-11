@@ -1,6 +1,13 @@
 #!bin/sh
 
+cd /mnt/ts3ServerBackupOnDocker
+
 git add serverHash
-git status
 
+sleep 1
 
+git commit -m "$(date +"%Y%m%d-%H%M%S")"
+
+sleep 2
+
+git push origin develop
