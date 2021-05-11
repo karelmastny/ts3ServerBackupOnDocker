@@ -1,0 +1,6 @@
+#!bin/sh
+
+git add serverHash
+git status
+
+
