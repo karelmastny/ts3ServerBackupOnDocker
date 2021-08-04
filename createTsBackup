@@ -1,45 +1,38 @@
-#!/bin/sh
-
-{ # try
-
-  # telnet to TS server, use sid=1 and save snapshot to file
-  (
-    sleep 1
-
-    echo "login serveradmin SERVERADMINPASSWORD"
-
-    sleep 1
-
-    echo "use 1"
-
-    sleep 1
-
-    echo "serversnapshotcreate"
-
-    sleep 3
-
-    echo "quit"
-
-  ) | telnet IPTOYOURTS3SERVER 10011 >/mnt/output.txt
-
-  # extract hashed backup data from telnet output
-  grep "data" /mnt/output.txt >/mnt/serverHash-$(date +"%Y%m%d-%H%M%S").txt
-
-  echo "createTsBackup: Backup completed at $(date +"%Y%m%d-%H%M%S")" >&1
-
-  # check the output size for catching error in telnet commands
-  FILESIZE=$(stat -c %s "/mnt/serverHash-$(date +"%Y%m%d-%H%M%S").txt")
-
-  if [ $FILESIZE != 0 ]; then
-    echo "createTsBackup: and the backup size is $FILESIZE bytes."
-    echo "createTsBackup: BRILLIANT!"
-  else
-    echo "createTsBackup: but backup size is $FILESIZE bytes, which means something went wrong on the telnet side."
-    echo "createTsBackup: BOLLOCKS!"
-  fi
-
-} || { # catch
-
-  echo "createTsBackup: Backup script didn't completes correctly."
-  echo "createTsBackup: BOLLOCKS!"
-}
+#!/bin/sh                                                                                                                                       
+                                                                                                                                                
+(                                                                                                                                               
+sleep 1                                                                                                                                         
+                                                                                                                                                
+echo "login serveradmin $SERVERADMINPASSWORD"                                                                                                               
+                                                                                                                                                
+sleep 1                                                                                                                                         
+                                                                                                                                                
+echo "use 1"                                                                                                                                    
+                                                                                                                                                
+sleep 1                                                                                                                                         
+                                                                                                                                                
+echo "serversnapshotcreate"                                                                                                                     
+                                                                                                                                                
+sleep 3                                                                                                                                         
+                                                                                                                                                
+echo "quit"                                                                                                                                     
+                                                                                                                                                
+) | telnet 192.168.1.1 10011 > /mnt/output.txt                                                                                                 
+                                                                                                                                                
+grep "data" /mnt/output.txt | tee /mnt/serverHash-$(date +"%Y%m%d").txt > /mnt/ts3ServerBackupOnDocker/serverHash                               
+                                                                                                                                                
+sleep 1                                                                                                                                         
+                                                                                                                                                
+cd /mnt/ts3ServerBackupOnDocker                                                                                                                 
+                                                                                                                                                
+sleep 1                                                                                                                                         
+                                                                                                                                                
+git add serverHash                                                                                                                              
+                                                                                                                                                
+sleep 1                                                                                                                                         
+                                                                                                                                                
+git commit -m "$(date +"%Y%m%d-%H%M%S")"                                                                                                        
+                                                                                                                                                
+sleep 2                                                                                                                                         
+                                                                                                                                                
+git push origin 2>&1
