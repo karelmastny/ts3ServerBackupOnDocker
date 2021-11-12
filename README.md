@@ -8,17 +8,17 @@ Script uses TeamSpeaks serverquery through telnet
 
 
 
-##installation
+## installation
 
-###images for TeamSpeak and Alpine
+### images for TeamSpeak and Alpine
 
 - https://registry.hub.docker.com/_/teamspeak/
 - https://registry.hub.docker.com/_/alpine/
 
-###mounting the storage for persistence for alpine
+### mounting the storage for persistence for alpine
 - alpine is mounted via /mnt to your preferred host path
 
-###changes in the script for your use
+### changes in the script for your use
 
 - replace SERVERADMINPASSWORD for serveradmin password
   - line 9 should look something like     `echo "login serveradmin 1a2B3c4"`
@@ -27,7 +27,7 @@ Script uses TeamSpeaks serverquery through telnet
 - the script assumes usage of alpine docker image which mounts to the host volume via /mnt
 - if you are using different place to run your script, change the paths accordingly
 
-###setting up the alpine
+### setting up the alpine
 - run `crond -b` in the terminal to run cron
 ````
 /mnt/scripts # ps                                                                                              
